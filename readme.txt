@@ -7,3 +7,6 @@ shell is a item
 
 I have to add some lines
 This is also a line for test
+
+git is useful
+dont you think so
