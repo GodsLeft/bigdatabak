@@ -1,17 +1,25 @@
-# simpleApp
+## simpleApp
 简单的spark程序
 
-# simplePageRank
+## simplePageRank
 简单的pageRank算法
 
-# simplePageRank1
+## simplePageRank1
 简单的pageRank算法，使用的是存储在hdfs上的cite75_99数据集
 
-# simpleRecomd
-简单的推荐算法，《spark机器学习》中的例子
+#《spark机器学习》
 
-# simpleStreaming
+## simpleRecomd
+简单的推荐算法，
+
+## simpleStreaming
 简单的sparkstreaming，尚有问
 
-# simpleClassify
+## simpleClassify
 分类算法，《spark机器学习中的例子》
+
+## simplePCA
+PCA降维
+
+## simpleRegression
+回归
