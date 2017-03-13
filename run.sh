@@ -6,6 +6,6 @@ scp -P 13000 ./runspark.sh \
              bigdata@slave04:~/
 
 #ssh -p 13000 bigdata@slave04 "spark-submit \
-#                            --class sparktest \
+#                            --class wordcount \
 #                            --master spark://master:7077 \
 #                            sparktest_2.10-1.0.jar"

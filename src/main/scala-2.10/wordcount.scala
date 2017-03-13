@@ -4,7 +4,7 @@ import org.apache.spark.{SparkConf, SparkContext}
   * Created by left on 17-3-9.
   */
 
-object sparktest {
+object wordcount {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("sparktest")
     val sc = new SparkContext(conf)
@@ -26,5 +26,4 @@ object sparktest {
 
     println("zhutime:" + time1 + " : " + time2)
   }
-
 }
