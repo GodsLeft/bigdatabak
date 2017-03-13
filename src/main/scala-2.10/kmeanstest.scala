@@ -94,7 +94,7 @@ object kmeanstest {
     val vecrdd = sc.textFile("hdfs://master:9000/user/bigdata/ips.csv")
       .map{line => line2vec(line, vec, hashmap, lines)}
 
-    vecrdd.takeSample(false, 3).foreach(println)
+    vecrdd.takeSample(false, 3).foreach(sample => println(sample.toList.mkString(",")))
 
     sc.stop()
   }
