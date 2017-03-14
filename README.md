@@ -12,3 +12,7 @@
 
 ## 其他
 - 可考虑使用异常检测算法
+
+## 参考文章
+- 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
+- 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2

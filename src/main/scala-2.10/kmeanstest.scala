@@ -110,10 +110,14 @@ object kmeanstest {
     println("Kmeans cost: " + kmeansCost)
 
     // 输出每个聚类的索引
-    kmeansdata.foreach{
-      vec =>
-        println(kmeansModel.predict(vec) + ": " + vec)
-    }
+    //kmeansdata.foreach{
+    //  vec =>
+    //    println(kmeansModel.predict(vec) + ": " + vec)
+    //}
+
+    // 将相同的key的记录输出到一个文件
+    kmeansdata.map{ vec => (kmeansModel.predict(vec) , vec) }.repartition(3).map{ pair => pair._1 +":"+ pair._2.toArray.mkString(",") }
+      .saveAsTextFile("hdfs://master:9000/user/bigdata/kmeans")
 
     // vecrdd.takeSample(false, 3).foreach(sample => println(sample.toList.mkString(",")))
 
