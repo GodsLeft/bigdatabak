@@ -27,5 +27,16 @@ runano(){
         --executor-memory 20G \
         sparktest_2.10-1.0.jar
 }
-time runano > logstdout 2> logstderr &
+
+# 验证一些问题的时候使用
+runsomeidea(){
+    spark-submit \
+        --class someidea \
+        --master local[*] \
+        --executor-memory 2G \
+        sparktest_2.10-1.0.jar
+}
+
 # time runkmeans
+time runano > logstdout 2> logstderr &
+# runsomeidea

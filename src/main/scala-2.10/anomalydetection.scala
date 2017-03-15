@@ -9,16 +9,19 @@ object anomalydetection {
 
   // 公式中使用到的sigma是标准差
   def gaosi(x: Double, u: Double, sigma: Double): Double = {
-    1.0 / sigma / Math.sqrt(2 * Math.PI) * Math.exp(- Math.pow(x - u, 2) / 2 / Math.pow(sigma, 2))
+    // 1.0 / sigma
+    1 / sigma / Math.sqrt(2 * Math.PI) * Math.exp(- Math.pow(x - u, 2) / 2 / Math.pow(sigma, 2))
   }
 
   // 这边传递的是方差数组
   def linegaosi(xarr: Array[Double], uarr: Array[Double], sarr: Array[Double]): Double = {
     var result = 1.0
-    for(i <- 0 until xarr.length){
-      result *= gaosi(xarr(i), uarr(i), sarr(i))
-    }
+    result *= gaosi(xarr(0), uarr(0), sarr(0))
     result
+    //for(i <- 0 until xarr.length){
+    //  result *= gaosi(xarr(i), uarr(i), sarr(i))
+    //}
+    //result
   }
 
   def main(args: Array[String]): Unit = {
@@ -48,17 +51,17 @@ object anomalydetection {
     // 暂时只输出异常的
     sc.textFile(kmeanstest.inputpath).map{
       line =>
-        val linevec = Vectors.dense(kmeanstest.line2vec(line, vecbag, hashmap, lines))
-        val lineresult = linegaosi(linevec.toArray, mean.toArray, variance.toArray)
+        // val linevec = Vectors.dense(kmeanstest.line2vec(line, vecbag, hashmap, lines))
+        val linevec = kmeanstest.line2vec(line, vecbag, hashmap, lines)
+        val lineresult = linegaosi(linevec, mean.toArray, sigma)
         //if (lineresult < 0.001) {
         //  ("a", line)
         //}
-        lineresult
+        lineresult + " : " + linevec.mkString(",")
     }.saveAsTextFile("hdfs://master:9000/user/bigdata/yichang")
 
     println("mean: " + mean)
     println("vari: " + variance)
     println("sigm: " + sigma.mkString(","))
   }
-
 }
