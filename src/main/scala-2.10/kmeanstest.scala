@@ -129,7 +129,7 @@ object kmeanstest {
 
     // 将不同标签的文件输出到不同的文件夹中
     for (label <- 0 until centerNum){
-      result.filter( pair => label == pair._1 ).map(pair => pair._2).saveAsTextFile(outputpath + "/" + label)
+      result.filter( pair => label == pair._1 ).saveAsTextFile(outputpath + "/" + label)
     }
 
     // vecrdd.takeSample(false, 3).foreach(sample => println(sample.toList.mkString(",")))
