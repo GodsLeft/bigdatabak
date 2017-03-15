@@ -20,11 +20,12 @@ runkmeans(){
 }
 
 runano(){
+    hadoop fs -rm -R yichang
     spark-submit \
         --class anomalydetection \
-        --master local[1] \
-        --executor-memory 10G \
+        --master spark://master:7077 \
+        --executor-memory 20G \
         sparktest_2.10-1.0.jar
 }
-runano
+time runano > logstdout 2> logstderr &
 # time runkmeans
