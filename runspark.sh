@@ -11,6 +11,7 @@ runwordcount(){
 }
 
 runkmeans(){
+    hadoop fs -rm -R kmeans
     spark-submit \
         --class kmeanstest \
         --master spark://master:7077 \
@@ -18,4 +19,12 @@ runkmeans(){
         sparktest_2.10-1.0.jar
 }
 
-runkmeans
+runano(){
+    spark-submit \
+        --class anomalydetection \
+        --master local[1] \
+        --executor-memory 10G \
+        sparktest_2.10-1.0.jar
+}
+runano
+# time runkmeans
