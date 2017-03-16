@@ -6,11 +6,11 @@ import org.apache.spark.mllib.linalg.Vectors
 /**
   * Created by left on 17-3-13.
   */
-object kmeanstest {
+object kmeans {
   // 定义分割字符串的方法
   val regstring = util.regstring
   val inputpath = util.inputpath
-  val outputpath = "hdfs://master:9000/user/bigdata/kmeans"
+  val outputpath = util.kmeansout
 
 
 

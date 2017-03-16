@@ -1,9 +1,9 @@
-import org.apache.spark.ml.feature.MinMaxScaler
+//import org.apache.spark.ml.feature.MinMaxScaler
 import org.apache.spark.mllib.feature.StandardScaler
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.SparkSession
+//import org.apache.spark.sql.SparkSession
 /**
   * Created by left on 17-3-15.
   */

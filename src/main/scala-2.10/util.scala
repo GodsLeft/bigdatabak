@@ -9,8 +9,12 @@ import scala.collection.mutable.HashMap
 object util {
   // 定义分割字符串的方法
   val regstring = " |=|,|\\.|\""
-  val inputpath = "hdfs://master:9000/user/bigdata/ips.csv"
-  val outputpath = "hdfs://master:9000/user/bigdata/kmeans"
+  //val inputpath = "hdfs://master:9000/user/bigdata/ips.csv"
+  //val anoout = "hdfs://master:9000/user/bigdata/yichang"
+  val kmeansout = "hdfs://master:9000/user/bigdata/kmeans"
+
+  val inputpath = "alluxio://master:19998/user/bigdata/ips.csv"
+  val anoout = "alluxio://master:19998/user/bigdata/yichang"
 
   // 公式中使用到的sigma是标准差
   def gaosi(x: Double, u: Double, sigma: Double): Double = {
@@ -19,9 +23,9 @@ object util {
 
   // 这边传递的是方差数组
   def linegaosi(xarr: Array[Double], uarr: Array[Double], sarr: Array[Double]): Double = {
-    var result = 0.0
+    var result = 1.0
     for(i <- 0 until xarr.length){
-      result += Math.log(gaosi(xarr(i), uarr(i), sarr(i)))
+      result *= gaosi(xarr(i), uarr(i), sarr(i))
     }
     result
   }

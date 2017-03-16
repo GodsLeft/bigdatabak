@@ -13,7 +13,7 @@ runwordcount(){
 runkmeans(){
     hadoop fs -rm -R kmeans
     spark-submit \
-        --class kmeanstest \
+        --class kmeans \
         --master spark://master:7077 \
         --executor-memory 20G \
         sparktest_2.10-1.0.jar
@@ -29,6 +29,7 @@ runano(){
         sparktest_2.10-1.0.jar
 
     rm yichang -r
+    rm yichang1 -r
     hadoop fs -get yichang
     hadoop fs -get yichang1
 }

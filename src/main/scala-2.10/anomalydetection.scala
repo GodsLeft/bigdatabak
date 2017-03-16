@@ -13,7 +13,7 @@ object anomalydetection {
     val sc = new SparkContext(conf)
 
     val inputpath = util.inputpath
-    val outputpath = util.outputpath
+    val outputpath = util.anoout
 
     val word = sc.textFile(inputpath)
       .flatMap(line => line.split(util.regstring))
@@ -24,7 +24,7 @@ object anomalydetection {
 
     val vecbag = word.collect()
 
-    val hashmap = kmeanstest.wdchashmap(sc, inputpath).toMap
+    val hashmap = kmeans.wdchashmap(sc, inputpath).toMap
 
     val vecrdd = sc.textFile(inputpath).map{line => Vectors.dense(util.line2vec(line, vecbag, hashmap, lines))}
 
@@ -56,11 +56,14 @@ object anomalydetection {
     println("vari: " + varia)
     println("sigm: " + sigma1.mkString(","))
 
+    // 将高斯函数值为0的日志输出
     sc.textFile(inputpath).map{
       line =>
         val linevec = util.line2vec(line, vecbag, hashmap, lines)
         val lineresult = util.linegaosi(scaler.transform(Vectors.dense(linevec)).toArray, mean1.toArray, sigma1)
-        lineresult //+ " : " + linevec.mkString(",")
-    }.saveAsTextFile("hdfs://master:9000/user/bigdata/yichang1")
+        (lineresult, line)
+    }
+      .filter(s => s._1 < Double.MinPositiveValue) //要选择一个好的阀值，从1e60开始降低:40:500M 20:466M 10:420M 1:419M
+      .saveAsTextFile(outputpath)
   }
 }
