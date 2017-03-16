@@ -2,35 +2,17 @@ import org.apache.spark.mllib.clustering.KMeans
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
 
-import scala.collection.mutable
-import scala.collection.mutable.HashMap
 
 /**
   * Created by left on 17-3-13.
   */
 object kmeanstest {
   // 定义分割字符串的方法
-  val regstring = " |=|,|\\.|\""
-  val inputpath = "hdfs://master:9000/user/bigdata/ips.csv"
+  val regstring = util.regstring
+  val inputpath = util.inputpath
   val outputpath = "hdfs://master:9000/user/bigdata/kmeans"
 
-  // 可以考虑只传递一个Rdd进来，返回（单词：文档个数）
-  def wdchashmap(sc: SparkContext, txtpath: String, vec: Array[String]): HashMap[String, Int] = {
-    val hashmap = new mutable.HashMap[String, Int]()
-    vec.foreach(word => hashmap.put(word, 0))
 
-    val wordcount = sc.textFile(txtpath)
-      .map{ line => //一篇文档一篇文档的进行处理
-        val linewords = line.split(regstring).filter(word => word.matches("[a-zA-Z]+")).distinct
-        linewords.foreach{ //对文档中的每一个词进行处理
-          word =>
-            if (hashmap.contains(word)){
-              hashmap(word) = hashmap.getOrElse(word, 0) + 1
-            }
-        }
-      }
-    hashmap
-  }
 
   // 单词：文档个数，另一种方法，更简单，更快速
   def wdchashmap(sc: SparkContext, txtpath: String): Array[(String, Int)] = {
@@ -42,24 +24,7 @@ object kmeanstest {
       .collect()
     wordcount
   }
-  /**
-    * 将一行日志转换为单词向量
-    * @param txt 输入的文本
-    * @param vec 输入的词集
-    * @return 输出对应该文本的向量
-    */
-  def convertVec(txt: String, vec: Array[String]): Array[Double] = {
-    val words = txt.split(regstring).filter(word => word.matches("[a-zA-Z]+"))
-    val arrp = new Array[Double](vec.size)
-    words.foreach{
-      word =>
-        val index = vec.indexOf(word)
-        if (index >=0 ) {
-          arrp(index) += 1
-        }
-    }
-    arrp
-  }
+
 
   // 将一行文本转化为向量，使用了近似的tf-idf算法
   def line2vec(line: String, vec: Array[String], hashmap: Map[String, Int], n: Long): Array[Double] = {
