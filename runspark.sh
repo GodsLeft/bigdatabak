@@ -21,17 +21,18 @@ runkmeans(){
 
 runano(){
     hadoop fs -rm -R yichang
-    hadoop fs -rm -R yichang1
+    alluxio fs rm -R yichang
     spark-submit \
         --class anomalydetection \
         --master spark://master:7077 \
         --executor-memory 20G \
-        sparktest_2.10-1.0.jar
+        sparktest_2.10-1.0.jar \
+        hdfs://master:9000/user/bigdata/ips.csv \
+        hdfs://master:9000/user/bigdata/yichang
 
     rm yichang -r
-    rm yichang1 -r
     hadoop fs -get yichang
-    hadoop fs -get yichang1
+    alluxio fs copyToLocal /user/bigdata/yichang yichang
 }
 
 # 验证一些问题的时候使用
@@ -43,6 +44,7 @@ runsomeidea(){
         sparktest_2.10-1.0.jar
 }
 
+#time runwordcount
 #time runkmeans
-time runano > logstdout 2> logstderr &
+#time runano > stdout 2> stderr &
 #runsomeidea

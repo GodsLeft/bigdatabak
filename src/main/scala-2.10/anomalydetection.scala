@@ -12,8 +12,8 @@ object anomalydetection {
     val conf = new SparkConf().setAppName("statistics")
     val sc = new SparkContext(conf)
 
-    val inputpath = util.inputpath
-    val outputpath = util.anoout
+    val inputpath = if (args(0) != null) args(0) else util.inputpath
+    val outputpath = if (args(1) != null) args(1) else util.anoout
 
     val word = sc.textFile(inputpath)
       .flatMap(line => line.split(util.regstring))
