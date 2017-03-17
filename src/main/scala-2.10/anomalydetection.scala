@@ -9,7 +9,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object anomalydetection {
 
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("statistics")
+    val conf = new SparkConf().setAppName("anomalydetection")
     val sc = new SparkContext(conf)
 
     val inputpath = if (args(0) != null) args(0) else util.inputpath

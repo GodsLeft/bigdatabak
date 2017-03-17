@@ -16,6 +16,10 @@ object wordcount {
     val conf = new SparkConf().setAppName("wordcount")
     val sc = new SparkContext(conf)
 
+    val input = if(args(0) != null) args(0) else util.inputpath
+    wdcnt(sc, input)
+    sc.stop()
+    /*
     val hdfsfile = if (args(0) != null) args(0) else util.inputpath
     val allufile = if (args(1) != null) args(1) else "alluxio://master:19998/user/bigdata/ips.csv"
 
@@ -30,7 +34,7 @@ object wordcount {
     val time2 = System.nanoTime() - starttime1
 
     println("zhutime: " + time1 + " : " + time2)
+    */
 
-    sc.stop()
   }
 }

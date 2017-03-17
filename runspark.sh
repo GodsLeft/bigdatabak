@@ -44,6 +44,38 @@ runsomeidea(){
         sparktest_2.10-1.0.jar
 }
 
+runanom(){
+    hadoop fs -rm -R yichang
+    alluxio fs rm -R yichang
+    spark-submit \
+        --class anomalydetection \
+        --master spark://master:7077 \
+        --executor-memory 20G \
+        sparktest_2.10-1.0.jar \
+        $1 \
+        $2
+    rm yichang -r
+    hadoop fs -get yichang
+    alluxio fs copyToLocal /user/bigdata/yichang yichang
+}
+
+runanotest(){
+    hdfsout="hdfs://master:9000/user/bigdata/yichang"
+    alluout="alluxio://master:19998/user/bigdata/yichang"
+
+    files=5
+    for index in {0..5};do
+        hdfsinput="hdfs://master:9000/user/bigdata/ipsdata/ips_$index.csv"
+        ( time runanom $hdfsinput $hdfsout > anohdfsout 2> anohdfserr; ) 2> anohdfs
+    done
+    echo "alluxio"
+    for index in {0..5};do
+        alluinput="alluxio://master:19998/user/bigdata/ipsdata/ips_$index.csv"
+        ( time runanom $alluinput $alluout > anoalluout 2> anoalluerr; ) 2> anoallu
+    done
+    echo "done"
+}
+runanotest
 #time runwordcount
 #time runkmeans
 #time runano > stdout 2> stderr &
