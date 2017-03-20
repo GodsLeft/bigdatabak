@@ -66,16 +66,16 @@ runanotest(){
     files=5
     for index in {0..5};do
         hdfsinput="hdfs://master:9000/user/bigdata/ipsdata/ips_$index.csv"
-        ( time runanom $hdfsinput $hdfsout > anohdfsout 2> anohdfserr; ) 2> anohdfs
+        { time runanom $hdfsinput $hdfsout > hdfsAnoout 2> hdfsAnoerr; } 2>> hdfsAnotime
     done
     echo "alluxio"
     for index in {0..5};do
         alluinput="alluxio://master:19998/user/bigdata/ipsdata/ips_$index.csv"
-        ( time runanom $alluinput $alluout > anoalluout 2> anoalluerr; ) 2> anoallu
+        { time runanom $alluinput $alluout > alluAnoout 2> alluAnoerr; } 2>> alluAnotime
     done
     echo "done"
 }
-runanotest
+time runanotest &
 #time runwordcount
 #time runkmeans
 #time runano > stdout 2> stderr &
