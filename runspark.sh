@@ -59,6 +59,14 @@ runanom(){
     alluxio fs copyToLocal /user/bigdata/yichang yichang
 }
 
+runfpg(){
+    spark-submit \
+        --class fpgrowth \
+        --master spark://master:7077 \
+        --executor-memory 20G \
+        sparktest_2.10-1.0.jar
+}
+
 runanotest(){
     hdfsout="hdfs://master:9000/user/bigdata/yichang"
     alluout="alluxio://master:19998/user/bigdata/yichang"

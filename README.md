@@ -17,6 +17,12 @@
 - 关于异常检测的阀值还可以深入考虑
 - 另外可以考虑使用word2vec算法
 
+## fpgrowth
+- 关联规则算法
+- 支持度：项集同时含有x，y的概率
+- 置信度：在x发生的情况下，y发生的概率，小的置信度筛选可靠的规则
+- 在满足一定支持度的情况下寻找置信度达到阀值的所有模式
+
 ## 参考文章
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
 - 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2
