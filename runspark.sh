@@ -91,7 +91,7 @@ runanotest(){
     echo "done"
 }
 
-time runtfidf
+time runtfidf 2> /dev/null
 #time runanotest &
 #time runwordcount
 #time runkmeans

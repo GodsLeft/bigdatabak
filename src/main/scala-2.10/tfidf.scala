@@ -12,7 +12,8 @@ object tfidf {
     val sc = new SparkContext(conf)
 
     // 加载文档，每个文档一行
-    val docs = sc.textFile("hdfs://master:9000/user/bigdata/ips.csv").map(_.split(util.regstring).toSeq)
+    val docs = sc.textFile("hdfs://master:9000/user/bigdata/ips.csv")
+      .map(_.split(util.regstring).filter(w=>w.matches("[a-zA-Z]+")).toSeq)
 
     val hashingtf = new HashingTF()
     val tf = hashingtf.transform(docs)
@@ -28,5 +29,8 @@ object tfidf {
     tfidf.take(3).foreach(println)
     println("==========")
     tfidfignore.take(3).foreach(println)
+    println("==========")
+    println(hashingtf.indexOf("error"))
+    println(hashingtf.numFeatures)
   }
 }
