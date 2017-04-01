@@ -13,14 +13,13 @@ object srcdstip {
 
     val txt = sc.textFile("hdfs://master:9000/user/bigdata/ips.csv")
       .map{line =>
-        if(line.contains("srcip=")) {
-          val words = line.split(",")
-          val srcip = words.filter(word => word.contains("srcip"))(0) //暂时不使用正则表达式
-          val dstip = words.filter(word => word.contains("dstip"))(0)
-          val key = srcip + "_" + dstip
-          (key, 1)
-        }
-        ("_", 1)
+        val words = line.split(",")
+        val srcips = words.filter(word => word.contains("srcip")) //暂时不使用正则表达式
+        val dstips = words.filter(word => word.contains("dstip"))
+        if(srcips.length>0 && dstips.length>0)
+          (srcips(0) + "_" + dstips(0), 1)
+        else
+          ("_", 1)
       }
       .reduceByKey(_+_)
       .saveAsTextFile("srcdstip")
