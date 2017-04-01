@@ -23,6 +23,9 @@
 - 置信度：在x发生的情况下，y发生的概率，小的置信度筛选可靠的规则
 - 在满足一定支持度的情况下寻找置信度达到阀值的所有模式
 
+## someidea
+- 我打算使用graphviz绘图工具自动生成 srcip->dstip 的图
+
 ## 参考文章
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
 - 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2

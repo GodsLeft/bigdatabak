@@ -19,6 +19,7 @@ runkmeans(){
         sparktest_2.10-1.0.jar
 }
 
+# 整个数据集上的异常检测算法
 runano(){
     hadoop fs -rm -R yichang
     alluxio fs rm -R yichang
@@ -46,7 +47,7 @@ runsomeidea(){
 
 runanom(){
     hadoop fs -rm -R yichang
-    alluxio fs rm -R yichang
+    alluxio fs rm -R /user/bigdata/yichang
     spark-submit \
         --class anomalydetection \
         --master spark://master:7077 \
@@ -54,9 +55,9 @@ runanom(){
         sparktest_2.10-1.0.jar \
         $1 \
         $2
-    rm yichang -r
-    hadoop fs -get yichang
-    alluxio fs copyToLocal /user/bigdata/yichang yichang
+    #rm yichang -r
+    #hadoop fs -get yichang
+    #alluxio fs copyToLocal /user/bigdata/yichang yichang
 }
 
 runfpg(){
@@ -74,26 +75,51 @@ runtfidf(){
         --executor-memory 20G \
         sparktest_2.10-1.0.jar
 }
-runanotest(){
-    hdfsout="hdfs://master:9000/user/bigdata/yichang"
-    alluout="alluxio://master:19998/user/bigdata/yichang"
 
-    files=5
+hdfspath=hdfs://master:9000/user/bigdata
+allupath=hdfs://master:19998/user/bigdata
+
+runwordcounttest(){
     for index in {0..5};do
-        hdfsinput="hdfs://master:9000/user/bigdata/ipsdata/ips_$index.csv"
-        { time runanom $hdfsinput $hdfsout > hdfsAnoout 2> hdfsAnoerr; } 2>> hdfsAnotime
+        hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+        #hdfsinput=$allupath/ipsdata/ips_$index.csv
+        time { spark-submit --class wordcount --master spark://master:7077 --executor-memory 20G sparktest*.jar $hdfsinput 2> /dev/null; }
     done
-    echo "alluxio"
-    for index in {0..5};do
-        alluinput="alluxio://master:19998/user/bigdata/ipsdata/ips_$index.csv"
-        { time runanom $alluinput $alluout > alluAnoout 2> alluAnoerr; } 2>> alluAnotime
-    done
-    echo "done"
 }
 
-time runtfidf 2> /dev/null
-#time runanotest &
+runkmeanstest(){
+    for index in {0..1};do
+        hadoop fs -rm -R kmeans
+        alluxio fs rm -R /user/bigdata/kmeans
+        hdfsinput=$allupath/ipsdata/ips_$index.csv
+        hdfsout=$allupath/kmeans
+        time { spark-submit --class kmeans --master spark://master:7077 --executor-memory 20G sparktest*.jar $hdfsinput $hdfsout 2> /dev/null; }
+    done
+}
+
+runanotest(){
+    hdfsout=$hdfspath/yichang
+    #alluout="alluxio://master:19998/user/bigdata/yichang"
+
+    for index in {0..1};do
+        hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+        { time runanom $hdfsinput $hdfsout > hdfsAnoout 2> /dev/null; } 2>> hdfsAnotime
+    done
+}
+
+runsrcdstip(){
+    hadoop fs -rm -R srcdstip
+    spark-submit --class someidea.srcdstip --master spark://master:7077 --executor-memory 20G sparktest*.jar
+}
+#time runtfidf 2> /dev/null
 #time runwordcount
 #time runkmeans
 #time runano > stdout 2> stderr &
 #runsomeidea
+#time runanotest
+#runkmeanstest
+#runwordcounttest
+runsrcdstip
+
+# 程序中的输出使用输出重定向
+# Spark的输出使用错误重定向

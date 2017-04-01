@@ -5,6 +5,11 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 
 object wordcount {
+  /**
+    * @param sc
+    * @param input:对输入的文件路径
+    * @return :输出单词不同单词个数
+    */
   def wdcnt(sc: SparkContext, input: String): Long ={
     sc.textFile(input).flatMap(line => line.split(util.regstring))
       .map(w => (w, 1))
@@ -19,22 +24,5 @@ object wordcount {
     val input = if(args(0) != null) args(0) else util.inputpath
     wdcnt(sc, input)
     sc.stop()
-    /*
-    val hdfsfile = if (args(0) != null) args(0) else util.inputpath
-    val allufile = if (args(1) != null) args(1) else "alluxio://master:19998/user/bigdata/ips.csv"
-
-    val starttime: Long = System.nanoTime();
-    wdcnt(sc, hdfsfile)
-    val time1 = System.nanoTime() - starttime
-
-    println("============ alluxio start ==========")
-
-    val starttime1: Long = System.nanoTime();
-    wdcnt(sc, allufile)
-    val time2 = System.nanoTime() - starttime1
-
-    println("zhutime: " + time1 + " : " + time2)
-    */
-
   }
 }
