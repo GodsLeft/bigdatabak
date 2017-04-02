@@ -108,8 +108,25 @@ runanotest(){
 }
 
 runsrcdstip(){
+    # hadoop操作
     hadoop fs -rm -R srcdstip
     spark-submit --class someidea.srcdstip --master spark://master:7077 --executor-memory 20G sparktest*.jar
+
+    # 本地操作
+    rm -r srcdstip
+    hadoop fs -get srcdstip
+    cd srcdstip
+    mv part-00000 srcdst.dot
+    sed -i '1i\digraph srcdst{' srcdst.dot
+    echo '}' >> srcdst.dot
+    dot -Tjpg srcdst.dot -o srcdst.jpg
+}
+
+mkdot(){
+    mv part-00000 srcdst.dot
+    sed -i '1i\digraph srcdst{' srcdst.dot
+    echo '}' >> srcdst.dot
+    dot -Tjpg srcdst.dot -o srcdst.jpg
 }
 #time runtfidf 2> /dev/null
 #time runwordcount
