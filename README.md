@@ -24,7 +24,15 @@
 - 在满足一定支持度的情况下寻找置信度达到阀值的所有模式
 
 ## someidea
-- 我打算使用graphviz绘图工具自动生成 srcip->dstip 的图
+- 使用graphviz绘图工具自动生成 srcip->dstip 的图
+- 过滤掉了很多小于阀值的访问请求
+- 画出来的图太大，不好看
+- 其中有一部分ip访问较为频繁，是因为他们是DNS服务器
+- 可以考虑使用流式计算，在一定的时间间隔内生成一个图，多图连续，变为动态图
+
+### streamingdemo
+- 以流式数据来处理
+- 使用sparkstreaming每隔一个时间段生成一个图
 
 ## 参考文章
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889

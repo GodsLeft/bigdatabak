@@ -128,6 +128,13 @@ mkdot(){
     echo '}' >> srcdst.dot
     dot -Tjpg srcdst.dot -o srcdst.jpg
 }
+
+runstreamingdemo(){
+    spark-submit \
+        --class someidea.streamingdemo \
+        sparktest*.jar
+}
+
 #time runtfidf 2> /dev/null
 #time runwordcount
 #time runkmeans
