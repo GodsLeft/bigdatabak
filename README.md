@@ -34,6 +34,12 @@
 - 以流式数据来处理
 - 使用sparkstreaming每隔一个时间段生成一个图
 
+#### 如何运行
+- 先运行流模拟程序:`./streamingmock.sh`
+- 接着运行sparkstreaming:`spark-submit --class someidea.streamingdemo sparktest*.jar 2>/dev/null`
+- 运行图像生成传输程序: `./todot.sh`
+- 运行程序接收程序: `./recivedot.sh`
+
 ## 参考文章
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
 - 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2
