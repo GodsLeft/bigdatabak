@@ -40,6 +40,9 @@
 - 运行图像生成传输程序: `./todot.sh`
 - 运行程序接收程序: `./recivedot.sh`
 
+#### 存在问题
+- 生成的动态图不好看，如果能将图片中的位置固定就好了
+
 ## 参考文章
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
 - 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2
