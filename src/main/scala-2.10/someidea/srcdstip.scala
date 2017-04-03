@@ -9,6 +9,8 @@ object srcdstip {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("srcdstip")
     val sc = new SparkContext(conf)
+
+    // 正则表达式匹配ip
     val iptn = "srcip=[0-9]+(?:\\.[0-9]+){0,3}".r
     val ipreg = """((?:(?:25[0-5]|2[0-4]\d|(?:1\d{2}|[1-9]?\d))\.){3}(?:25[0-5]|2[0-4]\d|(?:1\d{2}|[1-9]?\d)))""".r
 
