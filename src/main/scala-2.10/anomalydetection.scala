@@ -9,6 +9,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 object anomalydetection {
 
   def main(args: Array[String]): Unit = {
+    println("==========start==========")
+
     val conf = new SparkConf().setAppName("anomalydetection")
     val sc = new SparkContext(conf)
 
@@ -28,8 +30,8 @@ object anomalydetection {
 
     val vecrdd = sc.textFile(inputpath).map{line => Vectors.dense(util.line2vec(line, vecbag, hashmap, lines))}
 
+    /*
     val stat = Statistics.colStats(vecrdd)
-
     // 没有标准化的均值和方差
     val mean = stat.mean
     val variance = stat.variance
@@ -37,6 +39,7 @@ object anomalydetection {
     println("mean: " + mean)
     println("vari: " + variance)
     println("sigm: " + sigma.mkString(","))
+    */
 
     // 数据标准化
     val scaler = new StandardScaler(withMean = true, withStd = true).fit(vecrdd)
@@ -47,14 +50,14 @@ object anomalydetection {
     }
 
     // 标准化之后的均值和方差
-    println("==========zhu==========")
+    // println("==========std==========")
     val statis = Statistics.colStats(vectorsrdd)
     val mean1 = statis.mean
     val varia = statis.variance
     val sigma1 = varia.toArray.map(x=>Math.sqrt(x))
-    println("mean: " + mean1)
-    println("vari: " + varia)
-    println("sigm: " + sigma1.mkString(","))
+    //println("mean: " + mean1)
+    //println("vari: " + varia)
+    //println("sigm: " + sigma1.mkString(","))
 
     // 将高斯函数值为0的日志输出
     sc.textFile(inputpath).map{
@@ -65,5 +68,8 @@ object anomalydetection {
     }
       .filter(s => s._1 < Double.MinPositiveValue) //要选择一个好的阀值，从1e60开始降低:40:500M 20:466M 10:420M 1:419M
       .saveAsTextFile(outputpath)
+
+    sc.stop()
+    println("==========stop==========")
   }
 }

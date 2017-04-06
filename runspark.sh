@@ -77,36 +77,87 @@ runtfidf(){
 }
 
 hdfspath=hdfs://master:9000/user/bigdata
-allupath=hdfs://master:19998/user/bigdata
+allupath=alluxio://master:19998/user/bigdata
 
 runwordcounttest(){
     for index in {0..5};do
-        hdfsinput=$hdfspath/ipsdata/ips_$index.csv
-        #hdfsinput=$allupath/ipsdata/ips_$index.csv
+        #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+        hdfsinput=$allupath/ipsdata/ips_$index.csv
         echo "===="$index"====" >> wordcounttime
-        for cnt in {0..10};do
-            { time spark-submit --class wordcount --master spark://master:7077 --executor-memory 20G sparktest*.jar $hdfsinput 2> /dev/null; } 2>> wordcounttime
+        for cnt in {0..9};do
+            { time -p spark-submit \
+                    --class wordcount \
+                    --master spark://master:7077 \
+                    --executor-memory 20G \
+                    sparktest*.jar $hdfsinput 2> /dev/null;
+            } 2>> wordcounttime
         done
     done
 }
 
 runkmeanstest(){
-    for index in {0..1};do
-        hadoop fs -rm -R kmeans
-        alluxio fs rm -R /user/bigdata/kmeans
-        hdfsinput=$allupath/ipsdata/ips_$index.csv
-        hdfsout=$allupath/kmeans
-        time { spark-submit --class kmeans --master spark://master:7077 --executor-memory 20G sparktest*.jar $hdfsinput $hdfsout 2> /dev/null; }
+    rm kmeanstime
+    for index in {0..5};do
+        echo "===="$index"====" >> kmeanstime
+        for cnt in {0..9};do
+            #hadoop fs -rm -R kmeans
+            alluxio fs rm -R /user/bigdata/kmeans
+            hdfsinput=$allupath/ipsdata/ips_$index.csv
+            hdfsout=$allupath/kmeans
+            { time -p spark-submit \
+                        --class kmeans \
+                        --master spark://master:7077 \
+                        --executor-memory 20G \
+                        sparktest*.jar \
+                        $hdfsinput \
+                        $hdfsout 2> /dev/null;
+            } 2>> kmeanstime
+        done
     done
 }
 
 runanotest(){
     hdfsout=$hdfspath/yichang
-    #alluout="alluxio://master:19998/user/bigdata/yichang"
+    #alluout=alluxio://master:19998/user/bigdata/yichang
 
+    for index in {0..5};do
+        echo "===="$index"====" >> anotime
+        for cnt in {0..9};do
+            hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+            hadoop fs -rm -R $hdfsout
+            #{ time runanom $hdfsinput $hdfsout > hdfsAnoout 2> /dev/null; } 2>> anotime
+            { time -p spark-submit \
+                        --class anomalydetection \
+                        --master spark://master:7077 \
+                        --executor-memory 20G \
+                        sparktest*.jar \
+                        $hdfsinput \
+                        $hdfsout \
+                        2>/dev/null;
+            } 2>> anotime
+        done
+    done
+}
+
+runanotest_yarn(){
+    hdfsout=$hdfspath/yichang
     for index in {0..1};do
+        echo "===="$index"====" >> anotimeyarn
         hdfsinput=$hdfspath/ipsdata/ips_$index.csv
-        { time runanom $hdfsinput $hdfsout > hdfsAnoout 2> /dev/null; } 2>> hdfsAnotime
+        for cnt in {0..1};do
+            hadoop fs -rm -R $hdfsout
+            { time -p spark-submit \
+                        --class anomalydetection \
+                        --master yarn \
+                        --num-executors 72 \
+                        --driver-memory 5G \
+                        --executor-memory 10G \
+                        sparktest*.jar \
+                        $hdfsinput \
+                        $hdfsout \
+                        2> /dev/null;
+            } 2>> anotimeyarn
+        done
     done
 }
 
@@ -152,9 +203,11 @@ runstreaming(){
 #runsomeidea
 #time runanotest
 #runkmeanstest
-runwordcounttest
+#runwordcounttest
+runanotest
 #runsrcdstip
 #runstreaming
 
 # 程序中的输出使用输出重定向
 # Spark的输出使用错误重定向
+# alluxio fs free /user/bigdata/ipsdata
