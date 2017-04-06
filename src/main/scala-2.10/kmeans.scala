@@ -72,7 +72,7 @@ object kmeans {
 
     // 划分为三个子集，最多迭代50次
     val centerNum = 3
-    val kmeansModel = KMeans.train(kmeansdata, centerNum, 50)
+    val kmeansModel = KMeans.train(kmeansdata, centerNum, 30)
     // 输出聚类中心
     kmeansModel.clusterCenters.foreach{ println }
     // 计算聚类损失
