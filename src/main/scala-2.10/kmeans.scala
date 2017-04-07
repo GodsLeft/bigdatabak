@@ -39,6 +39,7 @@ object kmeans {
   }
 
   def main(args: Array[String]): Unit = {
+    println("==========start=========")
     val inputpath = if(args(0)!=null) args(0) else util.inputpath
     val outputpath = if(args(1) != null) args(1) else util.kmeansout
 
@@ -74,7 +75,7 @@ object kmeans {
     val centerNum = 3
     val kmeansModel = KMeans.train(kmeansdata, centerNum, 30)
     // 输出聚类中心
-    kmeansModel.clusterCenters.foreach{ println }
+    // kmeansModel.clusterCenters.foreach{ println }
     // 计算聚类损失
     val kmeansCost = kmeansModel.computeCost(kmeansdata)
     println("Kmeans cost: " + kmeansCost)
@@ -101,5 +102,6 @@ object kmeans {
     // vecrdd.takeSample(false, 3).foreach(sample => println(sample.toList.mkString(",")))
 
     sc.stop()
+    println("==========stop=========")
   }
 }

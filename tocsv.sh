@@ -10,7 +10,7 @@ csplit real$timefile /====/ -n 2 -s {*} -f linshi -b"%02d"
 rm linshi00
 rm real$timefile
 
-num=$( ls -al ./ | grep 'linshi' | wc -l)
+num=$( ls -al ./ | grep 'linshi' | wc -l )
 
 sed -i "1d" linshi*
 
