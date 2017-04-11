@@ -34,6 +34,7 @@
 - streamingdemo
     + 以流式数据来处理
     + 使用sparkstreaming每隔一个时间段生成一个图
+    + 可以考虑不要每次都生成一个新的图文件，可以将图文见变成一个FIFO类型的队列，固定行数，到达行数之后，添一行，删除一行
     + 先运行流模拟程序:`./streamingmock.sh`
     + 接着运行sparkstreaming:`spark-submit --class someidea.streamingdemo sparktest*.jar 2>/dev/null`
     + 运行图像生成传输程序: `./todot.sh`
