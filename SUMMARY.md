@@ -9,4 +9,5 @@
     * [spark简单用法](chapter2/spark.md)
 * [Chapter3](README.md)
     * [shuffle相关类](chapter3/shuffleclass.md)
+    * [shuffle相关疑惑&解答](chapter3/shuffleQA.md)
 
