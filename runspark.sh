@@ -96,13 +96,14 @@ runwordcounttest(){
 }
 
 runkmeanstest(){
-    rm kmeanstime
     for index in {0..5};do
         echo "===="$index"====" >> kmeanstime
+        #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+        hdfsinput=$allupath/ipsdata/ips_$index.csv
         for cnt in {0..9};do
             #hadoop fs -rm -R kmeans
+            #hdfsout=$hdfspath/kmeans
             alluxio fs rm -R /user/bigdata/kmeans
-            hdfsinput=$allupath/ipsdata/ips_$index.csv
             hdfsout=$allupath/kmeans
             { time -p spark-submit \
                         --class kmeans \
@@ -117,14 +118,17 @@ runkmeanstest(){
 }
 
 runanotest(){
-    hdfsout=$hdfspath/yichang
+    #hdfsout=$hdfspath/yichang
+    hdfsout=$allupath/yichang
     #alluout=alluxio://master:19998/user/bigdata/yichang
 
     for index in {0..5};do
         echo "===="$index"====" >> anotime
         for cnt in {0..9};do
-            hdfsinput=$hdfspath/ipsdata/ips_$index.csv
-            hadoop fs -rm -R $hdfsout
+            #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+            hdfsinput=$allupath/ipsdata/ips_$index.csv
+            #hadoop fs -rm -R $hdfsout
+            alluxio fs rm -R $hdfsout
             #{ time runanom $hdfsinput $hdfsout > hdfsAnoout 2> /dev/null; } 2>> anotime
             { time -p spark-submit \
                         --class anomalydetection \
@@ -202,9 +206,9 @@ runstreaming(){
 #time runano > stdout 2> stderr &
 #runsomeidea
 #time runanotest
-#runkmeanstest
+runkmeanstest
 #runwordcounttest
-runanotest
+#runanotest
 #runsrcdstip
 #runstreaming
 
