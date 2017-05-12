@@ -195,10 +195,10 @@ runstreamingdemo(){
 
 runstreaming(){
     # 这样做有点问题，不能够终结此程序
-    ./streamingmock.sh &    #向本机的9999端口发送数据
+    src/main/scala-2.10/someidea/streamingmock.sh &    #向本机的9999端口发送数据
     spark-submit --class someidea.streamingdemo sparktest*.jar 2> /dev/null &
     sleep 5
-    ./todot.sh &
+    src/main/scala-2.10/someidea/todot.sh &
 }
 #time runtfidf 2> /dev/null
 #time runwordcount

@@ -6,7 +6,7 @@ while [ true ];do
     ppnum=$(ps aux | grep "runspark" | wc -l)
     if [ $ppnum -lt 2 ];then
         mv kmeanstime kmeanstime00
-        ./runspark.sh
+        startsparktest.sh
         echo "done"
         break
     fi
@@ -22,7 +22,7 @@ done
 #        sed -i "s/#alluxio/alluxio/g" runkmeanstest.sh
 #        #sed -i "s/hadoop fs -rm -R kmeans/alluxio fs rm -R \/user\/bigdata\/kmeans/g" timetorun.sh
 #        ./runkmeanstest
-#        #./runspark.sh
+#        #./startsparktest.sh
 #        echo "hello"
 #        break
 #    fi
