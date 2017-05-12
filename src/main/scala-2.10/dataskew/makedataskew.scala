@@ -7,6 +7,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 /**
   * Created by left on 17-5-8.
   * 将数据变为倾斜数据 9：1 和 5：5
+  * 要尽量避免使用groupByKey，容易导致内存溢出
   */
 object makedataskew {
   def main(args: Array[String]): Unit = {
@@ -25,11 +26,24 @@ object makedataskew {
         val uu = new Random()
         while(partition.hasNext){
           val line = partition.next()
-          if(uu.nextFloat() < perc){
-            res.::=("aa", line)
+          val rdm = uu.nextFloat()
+          if(perc < 0.5){
+            if(rdm < perc/3)
+              res.::=("aa", line)
+            else if(rdm < 2*perc/3)
+              res.::=("bb", line)
+            else
+              res.::=("cc", line)
           } else {
-            res.::=("bb", line)
+            if (rdm < 1.0/3) res.::=("aa", line)
+            else if(rdm < 1.0/3 * 2) res.::=("bb", line)
+            else res.::=("cc", line)
           }
+          //if(uu.nextFloat() < perc){
+          //  res.::=("aa", line)
+          //} else {
+          //  res.::=("bb", line)
+          //}
         }
         res.iterator
     }

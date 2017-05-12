@@ -12,14 +12,36 @@ object groupbykey {
     val conf = new SparkConf().setAppName("groupbykey")
     val sc = new SparkContext(conf)
 
-    sc.textFile(inputpath).map{
+    val pairdd = sc.textFile(inputpath).map{
       line =>
         val index = line.indexOf(',')
         val key = line.substring(0, index)
-        val value = line.substring(index+1)
+        val value = line.substring(index+1).length
         (key, value)
-    }.groupByKey()
-      .saveAsTextFile(args(1))
+    }.groupByKey(3)
+      .map{
+        pair=>
+          val iter = pair._2.toIterator
+          var sum = 0.0
+          while(iter.hasNext){
+            sum += Math.pow(iter.next().toDouble, 2)
+          }
+          (pair._1, sum)
+      }
+
+    pairdd.collect().foreach(println)
+
+    //val pairdd = sc.textFile(inputpath).map{
+    //  line =>
+    //    val pair = line.split(",")
+    //    val value = pair(1).toFloat
+    //    (pair(0), value)
+    //}
+    //  .reduceByKey(_+_)
+
+    //pairdd.collect().foreach(println)
+
+    pairdd.saveAsTextFile(args(1))
 
     sc.stop()
 
