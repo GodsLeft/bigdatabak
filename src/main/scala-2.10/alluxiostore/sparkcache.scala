@@ -6,7 +6,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 /**
   * Created by left on 17-5-10.
   */
-object alluxiotest {
+object sparkcache {
   def main(args: Array[String]): Unit = {
 
     val inputpath = if (args(0) != null) args(0) else "hdfs://master:9000/user/bigdata/ipdata/ips_5.csv"
