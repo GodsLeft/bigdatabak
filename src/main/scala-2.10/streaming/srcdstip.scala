@@ -1,4 +1,4 @@
-package someidea
+package streaming
 
 import org.apache.spark.{SparkConf, SparkContext}
 

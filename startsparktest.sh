@@ -84,7 +84,7 @@ runwordcounttest(){
         #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
         hdfsinput=$allupath/ipsdata/ips_$index.csv
         echo "===="$index"====" >> wordcounttime
-        for cnt in {0..9};do
+        for cnt in {0..4};do
             { time -p spark-submit \
                     --class wordcount \
                     --master spark://master:7077 \
@@ -98,13 +98,13 @@ runwordcounttest(){
 runkmeanstest(){
     for index in {0..5};do
         echo "===="$index"====" >> kmeanstime
-        #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
-        hdfsinput=$allupath/ipsdata/ips_$index.csv
-        for cnt in {0..9};do
-            #hadoop fs -rm -R kmeans
-            #hdfsout=$hdfspath/kmeans
-            alluxio fs rm -R /user/bigdata/kmeans
-            hdfsout=$allupath/kmeans
+        hdfsinput=$hdfspath/ipsdata/ips_$index.csv
+        #hdfsinput=$allupath/ipsdata/ips_$index.csv
+        for cnt in {0..4};do
+            hadoop fs -rm -R kmeans
+            hdfsout=$hdfspath/kmeans
+            #alluxio fs rm -R /user/bigdata/kmeans
+            #hdfsout=$allupath/kmeans
             { time -p spark-submit \
                         --class kmeans \
                         --master spark://master:7077 \
@@ -124,7 +124,7 @@ runanotest(){
 
     for index in {0..5};do
         echo "===="$index"====" >> anotime
-        for cnt in {0..9};do
+        for cnt in {0..4};do
             #hdfsinput=$hdfspath/ipsdata/ips_$index.csv
             hdfsinput=$allupath/ipsdata/ips_$index.csv
             #hadoop fs -rm -R $hdfsout
