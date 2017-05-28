@@ -8,7 +8,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object statistics {
 
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("someidea")
+    val conf = new SparkConf().setAppName("streaming")
     val sc = new SparkContext(conf)
 
     val obver = sc.parallelize(

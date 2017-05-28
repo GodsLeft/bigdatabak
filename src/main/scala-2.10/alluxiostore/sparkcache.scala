@@ -18,7 +18,6 @@ object sparkcache {
       .flatMap(line=>line.split(" |=|,|\\.|\""))
       .cache()
 
-    // val wordcoutn = word.map(word=>(word, 1)).reduceByKey(_+_).collect()
     val errorcount = word.filter(w => w.contains("error")).count()
     val warncount = word.filter(w => w.contains("warn")).count()
     println("errorcount: " + errorcount)

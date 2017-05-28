@@ -16,7 +16,7 @@ object alluxiostore {
 
     sc.textFile(inputpath)
       .flatMap(line => line.split(" |=|,|\\.|\""))
-      .saveAsTextFile("alluxio://master:19998/user/bigdata/linshi")
+      .saveAsTextFile(linshi)
 
     // 将中间结果缓存在alluxio当中
     val word = sc.textFile(linshi)

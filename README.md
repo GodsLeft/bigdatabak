@@ -49,3 +49,4 @@
 - 介绍了文本聚类：http://blog.csdn.net/xiaojimanman/article/details/44977889
 - 介绍了kmeans算法：http://www.jianshu.com/p/32e895a940a2
 - 介绍了异常检测算法：http://www.jianshu.com/p/d8b6bb53f9a0
+- 介绍了FPGrowth算法：http://blog.csdn.net/wangqi880/article/details/52910078
