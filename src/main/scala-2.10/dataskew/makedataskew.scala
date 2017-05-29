@@ -13,13 +13,20 @@ object makedataskew {
   def main(args: Array[String]): Unit = {
 
     //val datapath = if(args(0) != null) args(0) else "hdfs://master:9000/user/bigdata/ipsdata/ips_2.csv"
-    val datapath = "hdfs://master:9000/user/bigdata/ipsdata/ips_5.csv"
-    val perc = args(0).toFloat
+    // the all file input path
+    // val datapath = "hdfs://master:9000/user/bigdata/ipsdata/ips_5.csv"
+    val datapath = "ipsdata/ips_5.csv"
+    val ratio = args(0).split(":").map(_.toInt)
+    val ratiosum = ratio.sum
+    val perclist = ratio.scan(0)(_+_).map(_.toDouble/ratiosum)
+    val rationum = perclist.length
+    val keylist = "abcdefghigklmnopqrstuvwxyz".toCharArray.map(_.toString)
 
     val conf = new SparkConf().setAppName("makedataskew")
     val sc = new SparkContext(conf)
 
     val txt = sc.textFile(datapath)
+
     val skewrdd = txt.mapPartitions{
       partition =>
         var res = List[(String, String)]()
@@ -27,27 +34,17 @@ object makedataskew {
         while(partition.hasNext){
           val line = partition.next()
           val rdm = uu.nextFloat()
-          if(perc < 0.5){
-            if(rdm < perc/3)
-              res.::=("aa", line)
-            else if(rdm < 2*perc/3)
-              res.::=("bb", line)
-            else
-              res.::=("cc", line)
-          } else {
-            if (rdm < 1.0/3) res.::=("aa", line)
-            else if(rdm < 1.0/3 * 2) res.::=("bb", line)
-            else res.::=("cc", line)
+          for(num <- 1 until rationum) {
+            if (rdm > perclist(num-1) && rdm < perclist(num)) {
+              res.::=(keylist(num), line)
+            }
           }
-          //if(uu.nextFloat() < perc){
-          //  res.::=("aa", line)
-          //} else {
-          //  res.::=("bb", line)
-          //}
         }
         res.iterator
     }
 
     skewrdd.map(line => line._1 + "," + line._2).saveAsTextFile(args(1))
+
+    sc.stop()
   }
 }

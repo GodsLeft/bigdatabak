@@ -4,19 +4,19 @@ makedata(){
     hadoop fs -rm -R skewdata1
     hadoop fs -rm -R skewdata2
     spark-submit --class dataskew.makedataskew \
-                    --master spark://master:7077 \
+                    --master spark://slave04:7077 \
                     --executor-memory 20G \
                     sparktest*.jar \
-                    0.01 \
+                    8:1:1 \
                     skewdata1
 
 
-    spark-submit --class dataskew.makedataskew \
-                    --master spark://master:7077 \
-                    --executor-memory 20G \
-                    sparktest*.jar \
-                    0.5 \
-                    skewdata2
+    #spark-submit --class dataskew.makedataskew \
+    #                --master spark://master:7077 \
+    #                --executor-memory 20G \
+    #                sparktest*.jar \
+    #                0.5 \
+    #                skewdata2
 }
 
 maketest(){
@@ -45,4 +45,4 @@ maketest(){
 }
 
 makedata
-maketest
+#maketest
