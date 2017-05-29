@@ -18,7 +18,7 @@ object groupbykey {
         val key = line.substring(0, index)
         val value = line.substring(index+1).length
         (key, value)
-    }.groupByKey(3)
+    }.groupByKey()
       .map{
         pair=>
           val iter = pair._2.toIterator
