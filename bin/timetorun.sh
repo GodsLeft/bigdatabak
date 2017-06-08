@@ -6,7 +6,7 @@ while [ true ];do
     ppnum=$(ps aux | grep "runspark" | wc -l)
     if [ $ppnum -lt 2 ];then
         mv kmeanstime kmeanstime00
-        startsparktest.sh
+        ../startsparktest.sh
         echo "done"
         break
     fi
