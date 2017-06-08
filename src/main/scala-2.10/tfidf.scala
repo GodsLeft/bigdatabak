@@ -2,6 +2,7 @@ import org.apache.spark.mllib.feature.{HashingTF, IDF}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vector
+import util.util
 
 /**
   * Created by left on 17-3-29.

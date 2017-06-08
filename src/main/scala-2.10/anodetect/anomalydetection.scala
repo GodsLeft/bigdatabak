@@ -1,7 +1,10 @@
+package anodetect
+
 import org.apache.spark.mllib.feature.StandardScaler
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.{SparkConf, SparkContext}
+import kmeans.kmeans
 
 /**
   * Created by left on 17-3-15.
@@ -14,11 +17,11 @@ object anomalydetection {
     val conf = new SparkConf().setAppName("anomalydetection")
     val sc = new SparkContext(conf)
 
-    val inputpath = if (args(0) != null) args(0) else util.inputpath
-    val outputpath = if (args(1) != null) args(1) else util.anoout
+    val inputpath = if (args(0) != null) args(0) else util.util.inputpath
+    val outputpath = if (args(1) != null) args(1) else util.util.anoout
 
     val word = sc.textFile(inputpath)
-      .flatMap(line => line.split(util.regstring))
+      .flatMap(line => line.split(util.util.regstring))
       .filter(word => word.matches("[a-zA-Z]+"))
       .distinct()
 
@@ -28,7 +31,7 @@ object anomalydetection {
 
     val hashmap = kmeans.wdchashmap(sc, inputpath).toMap
 
-    val vecrdd = sc.textFile(inputpath).map{line => Vectors.dense(util.line2vec(line, vecbag, hashmap, lines))}
+    val vecrdd = sc.textFile(inputpath).map{line => Vectors.dense(util.util.line2vec(line, vecbag, hashmap, lines))}
 
     /*
     val stat = Statistics.colStats(vecrdd)
@@ -45,7 +48,7 @@ object anomalydetection {
     val scaler = new StandardScaler(withMean = true, withStd = true).fit(vecrdd)
     val vectorsrdd = sc.textFile(inputpath).map{
       line =>
-        val linevec = util.line2vec(line, vecbag, hashmap, lines)
+        val linevec = util.util.line2vec(line, vecbag, hashmap, lines)
         scaler.transform(Vectors.dense(linevec))
     }
 
@@ -62,8 +65,8 @@ object anomalydetection {
     // 将高斯函数值为0的日志输出
     sc.textFile(inputpath).map{
       line =>
-        val linevec = util.line2vec(line, vecbag, hashmap, lines)
-        val lineresult = util.linegaosi(scaler.transform(Vectors.dense(linevec)).toArray, mean1.toArray, sigma1)
+        val linevec = util.util.line2vec(line, vecbag, hashmap, lines)
+        val lineresult = util.util.linegaosi(scaler.transform(Vectors.dense(linevec)).toArray, mean1.toArray, sigma1)
         (lineresult, line)
     }
       .filter(s => s._1 < Double.MinPositiveValue) //要选择一个好的阀值，从1e60开始降低:40:500M 20:466M 10:420M 1:419M

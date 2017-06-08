@@ -1,6 +1,8 @@
+package kmeans
+
 import org.apache.spark.mllib.clustering.KMeans
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.{SparkConf, SparkContext}
 
 
 /**
@@ -8,7 +10,7 @@ import org.apache.spark.mllib.linalg.Vectors
   */
 object kmeans {
   // 定义分割字符串的方法
-  val regstring = util.regstring
+  val regstring = util.util.regstring
 
 
 
@@ -40,8 +42,8 @@ object kmeans {
 
   def main(args: Array[String]): Unit = {
     println("==========start=========")
-    val inputpath = if(args(0)!=null) args(0) else util.inputpath
-    val outputpath = if(args(1) != null) args(1) else util.kmeansout
+    val inputpath = if(args(0)!=null) args(0) else util.util.inputpath
+    val outputpath = if(args(1) != null) args(1) else util.util.kmeansout
 
     val conf = new SparkConf().setAppName("kmeans")
     val sc = new SparkContext(conf)

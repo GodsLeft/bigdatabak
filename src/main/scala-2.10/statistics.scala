@@ -2,6 +2,7 @@ import org.apache.spark.mllib.feature.StandardScaler
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.{SparkConf, SparkContext}
+import util.util
 /**
   * Created by left on 17-3-15.
   */

@@ -1,4 +1,7 @@
+package wordcount
+
 import org.apache.spark.{SparkConf, SparkContext}
+import util.util
 
 /**
   * Created by left on 17-3-9.
