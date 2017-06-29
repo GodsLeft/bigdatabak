@@ -1,0 +1,28 @@
+zk:
+  image: mesosphere/mesos:1.2.0
+  command: /usr/share/zookeeper/bin/zkServer.sh start-foreground
+mmaster:
+  image: mesosphere/mesos-master:1.2.0
+  environment:
+    - MESOS_ZK=zk://zk:2181/mesos
+    - MESOS_LOG_DIR=/var/log/mesos
+    - MESOS_WORK_DIR=/var/lib/mesos
+  links:
+    - "zk:zk"
+  ports:
+    - "5050:5050"
+  volumes:
+    - ./target:/tmp/bin
+slave:
+  image: mesosphere/mesos-slave:1.2.0
+  environment:
+    - MESOS_MASTER=zk://zk:2181/mesos
+    - MESOS_LOG_DIR=/var/log/mesos
+    - MESOS_LOGGING_LEVEL=INFO
+    - MESOS_LAUNCHER=posix
+    - MESOS_WORK_DIR=/var/lib/mesos
+  links:
+    - "zk:zk"
+    - "mmaster:mmaster"
+  volumes:
+    - ./target:/tmp/bin
