@@ -4,3 +4,6 @@ project/
 .idea/
 *.iml
 *.csv
+*~
+time*
+
